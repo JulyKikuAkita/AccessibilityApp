@@ -32,6 +32,7 @@ struct ContentView: View {
     ]
 
     @State private var selectedPicture = Int.random(in: 0...3)
+    @State private var value = 10
 
     var body: some View {
         VStack {
@@ -47,8 +48,6 @@ struct ContentView: View {
             .accessibilityLabel("Your score is 1000") //no pause
             //.ignore is the default parameter for children: .accessibilityElement(children: .ignore) == .accessibilityElement().
 
-
-
             Image(pictures[selectedPicture])
                 .resizable()
                 .scaledToFit()
@@ -58,6 +57,31 @@ struct ContentView: View {
                 .accessibilityLabel(labels[selectedPicture])
                 .accessibilityAddTraits(.isButton)
                 .accessibilityRemoveTraits(.isImage)
+
+            VStack {
+                Text("Value: \(value)")
+                HStack {
+                    Button("Increment") {
+                        value += 1
+                    }
+                    Button("Decrement") {
+                        value -= 1
+                    }
+                }
+            }
+            .accessibilityElement() //ignore VoiceOver
+            .accessibilityLabel("Value")
+            .accessibilityValue(String(value))
+            .accessibilityAdjustableAction { direction in
+                switch direction {
+                case .increment:
+                    value += 1
+                case .decrement:
+                    value -= 1
+                default:
+                    print("Not handled.")
+                }
+            }
         }
 
     }
